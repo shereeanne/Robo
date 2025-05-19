@@ -5,12 +5,9 @@ plugins {
 }
 
 QtBuild {
-    qtPath = file("../../../Qt/6.9.0")
-//    projectPath = file("../../Foxy")
-//        projectPath = file("../../CarAnimation")
+    qtPath = file("../../../../Qt/6.9.0")
     projectPath = file("../../F1Transformer")
 
-//    projectPath = file("../../CuteRobo")
 }
 
 

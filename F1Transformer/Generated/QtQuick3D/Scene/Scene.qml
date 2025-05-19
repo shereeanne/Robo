@@ -9,12 +9,38 @@ Node {
 
     property int currentIndex: 0
     property int animationTrigger: 0
-
+    property bool isPlaying : rectangle.isPlaying   // Unsure
+    
     onAnimationTriggerChanged: {
-        console.log("Animation trigger received:", animationTrigger)
         changeCurrentAnimation()
-        playAnimation()
+        currentAnimation.animationObject.running = true;
     }
+
+    Connections {
+        target: transform_to_vehicle_timeline.animationObject
+        onRunningChanged: {
+                console.log("transform_to_vehicle_timeline received on running change")
+            if (vehicleAnim.running && currentAnimation === transform_to_vehicle_timeline) {
+                rectangle.isPlaying = true
+            } else if (!vehicleAnim.running && currentAnimation === transform_to_vehicle_timeline) {
+                rectangle.isPlaying = false
+            }
+        }
+    }
+
+    Connections {
+        target: transform_to_robot_timeline.animationObject
+        onRunningChanged: {
+        console.log("transform_to_robot_timeline received on running change")
+            if (robotHeroAnim.running && currentAnimation === transform_to_robot_timeline) {
+                rectangle.isPlaying = true
+            } else if (!robotHeroAnim.running && currentAnimation === transform_to_robot_timeline) {
+                rectangle.isPlaying = false
+            }
+        }
+    }
+
+// THIS WILL BE NEED FOR OTHER ANIMATIONS....
 
     function getTimeline(index) {
         switch(index) {
@@ -28,26 +54,23 @@ Node {
 
     function changeCurrentAnimation() {
         var oldTimeline = currentAnimation
-
-        console.log("currentIndex before:", currentIndex)
-
         currentIndex = (currentIndex + 1) % 4
-        console.log("currentIndex after:", currentIndex)
         var newTimeline = getTimeline(currentIndex)
 
         if (oldTimeline?.animationObject) {
             oldTimeline.animationObject.running = false
         }
-
         if (newTimeline) {
             currentAnimation = newTimeline
             console.log("Switched to", currentAnimation.objectName)
         }
     }
 
-   function playAnimation() {
-       currentAnimation.animationObject.running = true;
 
+   function onFinished()
+   {
+    console.log("On Finished received")
+    rectangle.isPlaying = false
    }
 
     // Resources

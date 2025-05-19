@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.collection.emptyLongSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.car_transforms.databinding.FragmentHomeBinding
@@ -48,14 +49,21 @@ class HomeFragment : Fragment(), QtQmlStatusChangeListener{
 
         binding.buttonOne.setOnClickListener {
             animationTrigger++
-            Log.e("Test", "Triggering animation change #$animationTrigger")
             firstQtQuickView.setProperty("animationTrigger", animationTrigger)
+
+            val result = firstQtQuickView.getProperty<Boolean>("isPlaying")
+            Log.e("Test", "result: $result")
+
+            //This would need to  "poll" for changes and no in the button handler
+            if (firstQtQuickView.getProperty("isPlaying"))
+            {
+                binding.buttonOne.text = "Playing...."
+            }
+            else
+                binding.buttonOne.text = "Cycle Animations"
+
             if (animationTrigger > 10)
                 animationTrigger = 0
-        }
-
-        binding.buttonTwo.setOnClickListener {
-            Log.e("Test", "Button Two clicked!")
         }
 
         firstQtQuickView.loadContent(firstQmlContent)

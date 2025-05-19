@@ -20,6 +20,7 @@ Rectangle {
     color: Constants.backgroundColor
 
     property int animationTrigger: 0
+    property bool isPlaying: false
 
 
     View3D {
@@ -49,6 +50,7 @@ Rectangle {
             Scene {
                 id: scene1
                 animationTrigger: rectangle.animationTrigger
+                isPlaying: rectangle.isPlaying
                 scale: "80,80,60"
                 x: 2.456
                 y: 0
