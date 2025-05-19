@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.collection.emptyLongSet
+import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.car_transforms.databinding.FragmentHomeBinding
@@ -23,9 +23,10 @@ class HomeFragment : Fragment(), QtQmlStatusChangeListener{
     private var _binding: FragmentHomeBinding? = null
 
     private var animationTrigger = 0
-
+    private var firstQmlContent: F1TransformerView = F1TransformerView()
 
     private val binding get() = _binding!!
+    private var firstQtQuickView: QtQuickView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,10 +35,8 @@ class HomeFragment : Fragment(), QtQmlStatusChangeListener{
     ): View {
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
+        firstQtQuickView = QtQuickView(this.activity)
 
-        val firstQmlContent: F1TransformerView = F1TransformerView()
-
-        val firstQtQuickView = QtQuickView(this.activity)
         val params: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
@@ -49,30 +48,32 @@ class HomeFragment : Fragment(), QtQmlStatusChangeListener{
 
         binding.buttonOne.setOnClickListener {
             animationTrigger++
-            firstQtQuickView.setProperty("animationTrigger", animationTrigger)
+            firstQtQuickView?.setProperty("animationTrigger", animationTrigger)
 
-            val result = firstQtQuickView.getProperty<Boolean>("isPlaying")
+            val result = firstQtQuickView?.getProperty<Boolean>("isPlaying")
             Log.e("Test", "result: $result")
-
-            //This would need to  "poll" for changes and no in the button handler
-            if (firstQtQuickView.getProperty("isPlaying"))
-            {
-                binding.buttonOne.text = "Playing...."
-            }
-            else
-                binding.buttonOne.text = "Cycle Animations"
 
             if (animationTrigger > 10)
                 animationTrigger = 0
         }
 
-        firstQtQuickView.loadContent(firstQmlContent)
+        firstQtQuickView?.loadContent(firstQmlContent)
 
         return root
     }
 
     override fun onStatusChanged(status: QtQmlStatus?, content: QtQuickViewContent?) {
         Log.i("Test", "Status of QtQuickView: $status")
+
+        firstQmlContent.connectIsPlayingChangeListener{ _:String, value: Boolean? ->
+
+            if (firstQtQuickView!!.getProperty("isPlaying"))
+            {
+                binding.buttonOne.text = "Playing...."
+            }
+            else
+                binding.buttonOne.text = "Cycle Animations"
+        }
 
     }
 

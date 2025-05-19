@@ -13,7 +13,7 @@ Node {
     
     onAnimationTriggerChanged: {
         changeCurrentAnimation()
-        currentAnimation.animationObject.running = true;
+                currentAnimation.animationObject.running = true;
     }
 
     Connections {
@@ -22,7 +22,7 @@ Node {
                 console.log("transform_to_vehicle_timeline received on running change")
             if (vehicleAnim.running && currentAnimation === transform_to_vehicle_timeline) {
                 rectangle.isPlaying = true
-            } else if (!vehicleAnim.running && currentAnimation === transform_to_vehicle_timeline) {
+            } else {
                 rectangle.isPlaying = false
             }
         }
@@ -34,11 +34,37 @@ Node {
         console.log("transform_to_robot_timeline received on running change")
             if (robotHeroAnim.running && currentAnimation === transform_to_robot_timeline) {
                 rectangle.isPlaying = true
-            } else if (!robotHeroAnim.running && currentAnimation === transform_to_robot_timeline) {
+            } else {
                 rectangle.isPlaying = false
             }
         }
     }
+
+
+    Connections {
+        target: transform_to_vehicle_hero_timeline.animationObject
+        onRunningChanged: {
+            if (vehicleHeroAnim.running && currentAnimation === transform_to_vehicle_hero_timeline) {
+                console.log("transform_to_vehicle_hero_timeline received on running change")
+                rectangle.isPlaying = true
+            } else {
+                rectangle.isPlaying = false
+            }
+        }
+    }
+
+    Connections {
+        target: transform_to_robot_hero_timeline.animationObject
+        onRunningChanged: {
+            if (roboHeroAnim.running && currentAnimation === transform_to_robot_hero_timeline) {
+                console.log("transform_to_robot_hero_timeline received on running change")
+                rectangle.isPlaying = true
+            } else {
+                rectangle.isPlaying = false
+            }
+        }
+    }
+
 
 // THIS WILL BE NEED FOR OTHER ANIMATIONS....
 
@@ -59,19 +85,13 @@ Node {
 
         if (oldTimeline?.animationObject) {
             oldTimeline.animationObject.running = false
+            rectangle.isPlaying = false
         }
         if (newTimeline) {
             currentAnimation = newTimeline
             console.log("Switched to", currentAnimation.objectName)
         }
     }
-
-
-   function onFinished()
-   {
-    console.log("On Finished received")
-    rectangle.isPlaying = false
-   }
 
     // Resources
     Texture {
