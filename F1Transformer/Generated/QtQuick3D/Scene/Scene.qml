@@ -1,54 +1,58 @@
 import QtQuick
 import QtQuick3D
-
 import QtQuick.Timeline
 
 Node {
     id: node
     property Timeline currentAnimation: transform_to_vehicle_timeline
-
     property int currentIndex: 0
     property int animationTrigger: 0
-    property bool isPlaying : rectangle.isPlaying   // Unsure
+    property bool isPlaying : rectangle.isPlaying
     
+    
+    property var timelines: [
+        transform_to_vehicle_timeline,   
+        transform_to_vehicle_hero_timeline,
+        transform_to_robot_hero_timeline,
+        transform_to_robot_timeline
+    ]
+
     onAnimationTriggerChanged: {
         changeCurrentAnimation()
-                currentAnimation.animationObject.running = true;
+        currentAnimation.animationObject.running = true;
     }
 
+    function changeCurrentAnimation() {
+        if (currentAnimation?.animationObject)
+            currentAnimation.animationObject.running = false
+        currentIndex = (currentIndex + 1) % timelines.length
+        console.log("current index: ", currentIndex)
+        currentAnimation = timelines[currentIndex]
+    }
+    
     Connections {
         target: transform_to_vehicle_timeline.animationObject
         onRunningChanged: {
-                console.log("transform_to_vehicle_timeline received on running change")
-            if (vehicleAnim.running && currentAnimation === transform_to_vehicle_timeline) {
-                rectangle.isPlaying = true
-            } else {
-                rectangle.isPlaying = false
-            }
+            if (currentAnimation === transform_to_vehicle_timeline) {
+                rectangle.isPlaying = vehicleAnim.running
+            } 
         }
     }
 
     Connections {
         target: transform_to_robot_timeline.animationObject
         onRunningChanged: {
-        console.log("transform_to_robot_timeline received on running change")
-            if (robotHeroAnim.running && currentAnimation === transform_to_robot_timeline) {
-                rectangle.isPlaying = true
-            } else {
-                rectangle.isPlaying = false
+            if (currentAnimation === transform_to_robot_timeline) {
+                rectangle.isPlaying = robotHeroAnim.running
             }
         }
     }
 
-
     Connections {
         target: transform_to_vehicle_hero_timeline.animationObject
         onRunningChanged: {
-            if (vehicleHeroAnim.running && currentAnimation === transform_to_vehicle_hero_timeline) {
-                console.log("transform_to_vehicle_hero_timeline received on running change")
-                rectangle.isPlaying = true
-            } else {
-                rectangle.isPlaying = false
+            if (currentAnimation === transform_to_vehicle_hero_timeline) {
+                rectangle.isPlaying = vehicleHeroAnim.running 
             }
         }
     }
@@ -56,40 +60,9 @@ Node {
     Connections {
         target: transform_to_robot_hero_timeline.animationObject
         onRunningChanged: {
-            if (roboHeroAnim.running && currentAnimation === transform_to_robot_hero_timeline) {
-                console.log("transform_to_robot_hero_timeline received on running change")
-                rectangle.isPlaying = true
-            } else {
-                rectangle.isPlaying = false
+            if (currentAnimation === transform_to_robot_hero_timeline) {
+                rectangle.isPlaying = roboHeroAnim.running
             }
-        }
-    }
-
-
-// THIS WILL BE NEED FOR OTHER ANIMATIONS....
-
-    function getTimeline(index) {
-        switch(index) {
-        case 0: return transform_to_vehicle_timeline
-        case 1: return transform_to_robot_timeline
-        case 2: return transform_to_vehicle_hero_timeline
-        case 3: return transform_to_robot_hero_timeline
-        }
-        return null
-    }
-
-    function changeCurrentAnimation() {
-        var oldTimeline = currentAnimation
-        currentIndex = (currentIndex + 1) % 4
-        var newTimeline = getTimeline(currentIndex)
-
-        if (oldTimeline?.animationObject) {
-            oldTimeline.animationObject.running = false
-            rectangle.isPlaying = false
-        }
-        if (newTimeline) {
-            currentAnimation = newTimeline
-            console.log("Switched to", currentAnimation.objectName)
         }
     }
 
@@ -819,7 +792,7 @@ Node {
     }
 
 
-    // TODO: working here
+
     Timeline {
         id: transform_to_vehicle_hero_timeline
         objectName: "transform_to_vehicle_hero"
@@ -832,11 +805,11 @@ Node {
 
         animations: TimelineAnimation {
             id: vehicleHeroAnim
-            duration: 5000
+            duration: 3500
             from: 0
             to: 2000
             running: false
-            loops: 2
+            loops: 1
         }
         KeyframeGroup {
             target: bn_pelvis01_02
@@ -1312,11 +1285,11 @@ Node {
 
         animations: TimelineAnimation {
             id: roboHeroAnim
-            duration: 5000
+            duration: 3500
             from: 0
             to: 2367
             running: false
-            loops: 2
+            loops: 1
         }
         KeyframeGroup {
             target: bn_pelvis01_02
@@ -1794,11 +1767,11 @@ Node {
 
         animations: TimelineAnimation {
             id: vehicleAnim
-            duration: 1001
+            duration: 4000
             from: 0
             to: 5001
             running: false
-            loops: 2
+            loops: 1
         }
         KeyframeGroup {
             target: bn_pelvis01_02
@@ -2272,11 +2245,11 @@ Node {
 
         animations: TimelineAnimation {
         id: robotHeroAnim
-            duration: 1001
+            duration: 4000
             from: 0
-            to: 5000
+            to: 4000
             running: false
-            loops: 2
+            loops: 1
         }
         KeyframeGroup {
             target: bn_pelvis01_02

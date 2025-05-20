@@ -66,7 +66,6 @@ class HomeFragment : Fragment(), QtQmlStatusChangeListener{
         Log.i("Test", "Status of QtQuickView: $status")
 
         firstQmlContent.connectIsPlayingChangeListener{ _:String, value: Boolean? ->
-
             if (firstQtQuickView!!.getProperty("isPlaying"))
             {
                 binding.buttonOne.text = "Playing...."
