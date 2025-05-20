@@ -1,11 +1,5 @@
 
 
-/*
-This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
-It is supposed to be strictly declarative and only uses a subset of QML. If you edit
-this file manually, you might introduce QML code that is not supported by Qt Design Studio.
-Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on .ui.qml files.
-*/
 import QtQuick
 import QtQuick.Controls
 import QtQuick3D
@@ -20,7 +14,7 @@ Rectangle {
     color: Constants.backgroundColor
 
     property int animationTrigger: 0
-    property bool isPlaying: false
+    property bool isPlaying: scene1.isPlaying
 
 
     View3D {
@@ -50,7 +44,6 @@ Rectangle {
             Scene {
                 id: scene1
                 animationTrigger: rectangle.animationTrigger
-                isPlaying: rectangle.isPlaying
                 scale: "80,80,60"
                 x: 2.456
                 y: 0

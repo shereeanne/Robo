@@ -4,14 +4,13 @@ import QtQuick.Timeline
 
 Node {
     id: node
-    property Timeline currentAnimation: transform_to_vehicle_timeline
+    property Timeline currentAnimation: timelines[currentIndex]
     property int currentIndex: 0
     property int animationTrigger: 0
-    property bool isPlaying : rectangle.isPlaying
-    
-    
+    property bool isPlaying: currentAnimation.animationObject.running
+
     property var timelines: [
-        transform_to_vehicle_timeline,   
+        transform_to_vehicle_timeline,
         transform_to_vehicle_hero_timeline,
         transform_to_robot_hero_timeline,
         transform_to_robot_timeline
@@ -26,44 +25,6 @@ Node {
         if (currentAnimation?.animationObject)
             currentAnimation.animationObject.running = false
         currentIndex = (currentIndex + 1) % timelines.length
-        console.log("current index: ", currentIndex)
-        currentAnimation = timelines[currentIndex]
-    }
-    
-    Connections {
-        target: transform_to_vehicle_timeline.animationObject
-        onRunningChanged: {
-            if (currentAnimation === transform_to_vehicle_timeline) {
-                rectangle.isPlaying = vehicleAnim.running
-            } 
-        }
-    }
-
-    Connections {
-        target: transform_to_robot_timeline.animationObject
-        onRunningChanged: {
-            if (currentAnimation === transform_to_robot_timeline) {
-                rectangle.isPlaying = robotHeroAnim.running
-            }
-        }
-    }
-
-    Connections {
-        target: transform_to_vehicle_hero_timeline.animationObject
-        onRunningChanged: {
-            if (currentAnimation === transform_to_vehicle_hero_timeline) {
-                rectangle.isPlaying = vehicleHeroAnim.running 
-            }
-        }
-    }
-
-    Connections {
-        target: transform_to_robot_hero_timeline.animationObject
-        onRunningChanged: {
-            if (currentAnimation === transform_to_robot_hero_timeline) {
-                rectangle.isPlaying = roboHeroAnim.running
-            }
-        }
     }
 
     // Resources
@@ -2244,7 +2205,7 @@ Node {
         property alias animationObject: robotHeroAnim
 
         animations: TimelineAnimation {
-        id: robotHeroAnim
+            id: robotHeroAnim
             duration: 4000
             from: 0
             to: 4000

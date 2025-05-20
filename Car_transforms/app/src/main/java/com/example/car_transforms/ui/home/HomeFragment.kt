@@ -50,9 +50,6 @@ class HomeFragment : Fragment(), QtQmlStatusChangeListener{
             animationTrigger++
             firstQtQuickView?.setProperty("animationTrigger", animationTrigger)
 
-            val result = firstQtQuickView?.getProperty<Boolean>("isPlaying")
-            Log.e("Test", "result: $result")
-
             if (animationTrigger > 10)
                 animationTrigger = 0
         }
@@ -63,8 +60,6 @@ class HomeFragment : Fragment(), QtQmlStatusChangeListener{
     }
 
     override fun onStatusChanged(status: QtQmlStatus?, content: QtQuickViewContent?) {
-        Log.i("Test", "Status of QtQuickView: $status")
-
         firstQmlContent.connectIsPlayingChangeListener{ _:String, value: Boolean? ->
             if (firstQtQuickView!!.getProperty("isPlaying"))
             {
@@ -73,7 +68,6 @@ class HomeFragment : Fragment(), QtQmlStatusChangeListener{
             else
                 binding.buttonOne.text = "Cycle Animations"
         }
-
     }
 
     override fun onDestroyView() {

@@ -2,7 +2,7 @@ import QmlProject
 
 Project {
     mainFile: "F1TransformerContent/App.qml"
-    mainUiFile: "F1TransformerContent/Screen01.ui.qml"
+    mainUiFile: "F1TransformerContent/Screen01.qml"
 
     /* Include .qml, .js, and image files from current directory and subdirectories */
     QmlFiles {
