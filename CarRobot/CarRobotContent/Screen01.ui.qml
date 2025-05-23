@@ -13,10 +13,12 @@ import CarRobot
 import Generated.QtQuick3D.Scene
 
 Rectangle {
+    id: rectangle
     width: Constants.width
     height: Constants.height
 
     color: Constants.backgroundColor
+    property string currentState: "transform_to_vehicle_hero_timeline"
 
     View3D {
         id: view3D
@@ -47,6 +49,7 @@ Rectangle {
                 id: scene1
                 x: 1.96
                 y: 0
+                state: rectangle.currentState
                 z: 19.01318
             }
         }

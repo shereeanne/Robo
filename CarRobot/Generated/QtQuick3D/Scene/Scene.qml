@@ -31,16 +31,6 @@ Node {
         mipFilter: Texture.Linear
         source: "maps/Mirage_0_Body_normal.png"
     }
-    SpecularGlossyMaterial {
-        id: mirage_0_Body_material
-        objectName: "Mirage_0_Body"
-        albedoMap: textures_Mirage_0_Body_diffuse_png_texture
-        specularMap: textures_Mirage_0_Body_specularGlossiness_png_texture
-        glossinessMap: textures_Mirage_0_Body_specularGlossiness_png_texture
-        normalMap: textures_Mirage_0_Body_normal_png_texture
-        cullMode: SpecularGlossyMaterial.NoCulling
-        alphaMode: SpecularGlossyMaterial.Opaque
-    }
     Skin {
         id: skin
         joints: [
@@ -752,13 +742,15 @@ Node {
         startFrame: 0
         endFrame: 1834
         currentFrame: 0
-        enabled: true
+        enabled: false
         animations: TimelineAnimation {
+            id: timelineAnimation
+            running: transform_to_robot_hero_timeline.enabled
+            loops: 1
+            alwaysRunToEnd: false
             duration: 1834
             from: 0
             to: 1834
-            running: true
-            loops: Animation.Infinite
         }
         KeyframeGroup {
             target: bn_pelvis01_02
@@ -1226,12 +1218,12 @@ Node {
         startFrame: 0
         endFrame: 2367
         currentFrame: 0
-        enabled: true
+        enabled: false
         animations: TimelineAnimation {
+            running: transform_to_robot_hero_timeline.enabled
             duration: 2367
             from: 0
             to: 2367
-            running: true
             loops: Animation.Infinite
         }
         KeyframeGroup {
@@ -1703,13 +1695,13 @@ Node {
         startFrame: 0
         endFrame: 1001
         currentFrame: 0
-        enabled: true
+        enabled: false
         animations: TimelineAnimation {
+            running: transform_to_vehicle_timeline.enabled
+            loops: 1
             duration: 1001
             from: 0
             to: 1001
-            running: true
-            loops: Animation.Infinite
         }
         KeyframeGroup {
             target: bn_pelvis01_02
@@ -2177,7 +2169,7 @@ Node {
         startFrame: 0
         endFrame: 1001
         currentFrame: 0
-        enabled: true
+        enabled: false
         animations: TimelineAnimation {
             duration: 1001
             from: 0
@@ -2650,4 +2642,64 @@ Node {
             keyframeSource: "animations/bn_r_wrist01_033_rotation_3.qad"
         }
     }
+
+    Node {
+        id: __materialLibrary__
+
+        SpecularGlossyMaterial {
+            id: mirage_0_Body_material
+            objectName: "Mirage_0_Body"
+            albedoMap: textures_Mirage_0_Body_diffuse_png_texture
+            specularMap: textures_Mirage_0_Body_specularGlossiness_png_texture
+            glossinessMap: textures_Mirage_0_Body_specularGlossiness_png_texture
+            normalMap: textures_Mirage_0_Body_normal_png_texture
+            cullMode: SpecularGlossyMaterial.NoCulling
+            alphaMode: SpecularGlossyMaterial.Opaque
+        }
+    }
+    states: [
+        State {
+            name: "transform_to_vehicle_hero_timeline"
+
+            PropertyChanges {
+                target: transform_to_vehicle_hero_timeline
+                enabled: true
+            }
+
+            PropertyChanges {
+                target: timelineAnimation
+                running: transform_to_vehicle_hero_timeline.enabled
+            }
+        },
+        State {
+            name: "transform_to_robot_hero_timeline"
+
+            PropertyChanges {
+                target: transform_to_robot_hero_timeline
+                enabled: true
+            }
+        },
+        State {
+            name: "transform_to_vehicle_timeline"
+
+            PropertyChanges {
+                target: transform_to_vehicle_timeline
+                enabled: true
+            }
+        },
+        State {
+            name: "transform_to_robot_timeline"
+
+            PropertyChanges {
+                target: transform_to_robot_timeline
+                enabled: true
+            }
+        }
+    ]
 }
+
+/*##^##
+Designer {
+    D{i:0;cameraSpeed3d:25;cameraSpeed3dMultiplier:1}
+}
+##^##*/
