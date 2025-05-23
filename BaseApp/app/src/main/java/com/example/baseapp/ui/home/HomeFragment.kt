@@ -13,9 +13,13 @@ import android.widget.FrameLayout
 import org.qtproject.example.CarRobotApp.CarRobotContent.Screen01
 import org.qtproject.qt.android.QtQuickView
 import org.qtproject.qt.android.QtQuickViewContent
+import org.qtproject.qt.android.QtQmlStatus
+import org.qtproject.qt.android.QtQmlStatusChangeListener
+import android.util.Log
 
 
-class HomeFragment : Fragment() {
+
+class HomeFragment : Fragment() , QtQmlStatusChangeListener {
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -43,12 +47,17 @@ class HomeFragment : Fragment() {
 
         binding.firstQmlFrame.addView(firstQtQuickView, params)
         firstQtQuickView?.loadContent(firstQmlContent)
+        firstQmlContent.setStatusChangeListener(this)
 
         val textView: TextView = binding.textHome
         homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root
+    }
+
+    override fun onStatusChanged(status: QtQmlStatus?, content: QtQuickViewContent?) {
+        Log.e("HomeFragment", "QML status received: $status")
     }
 
     override fun onDestroyView() {
