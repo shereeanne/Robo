@@ -28,7 +28,8 @@ class HomeFragment : Fragment() , QtQmlStatusChangeListener {
     private val binding get() = _binding!!
     private var firstQmlContent: Screen01 = Screen01()
     private var firstQtQuickView: QtQuickView? = null
-
+    private val animationList = listOf("transform_to_vehicle_hero", "transform_to_robot_hero_timeline", "transform_to_vehicle_timeline", "transform_to_robot_timeline")
+    private var animationCounter = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,6 +50,11 @@ class HomeFragment : Fragment() , QtQmlStatusChangeListener {
         firstQtQuickView?.loadContent(firstQmlContent)
         firstQmlContent.setStatusChangeListener(this)
 
+        binding.buttonOne.setOnClickListener {
+            animationCounter++
+            firstQtQuickView?.setProperty("currentState", animationList[animationCounter % animationList.size])
+        }
+
         val textView: TextView = binding.textHome
         homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
@@ -57,8 +63,17 @@ class HomeFragment : Fragment() , QtQmlStatusChangeListener {
     }
 
     override fun onStatusChanged(status: QtQmlStatus?, content: QtQuickViewContent?) {
-        Log.e("HomeFragment", "QML status received: $status")
-    }
+
+            firstQmlContent.connectIsPlayingChangeListener{ _:String, value: Boolean? ->
+                if (firstQtQuickView!!.getProperty("isPlaying"))
+                {
+                    binding.buttonOne.text = "Playing...."
+                }
+                else
+                    binding.buttonOne.text = "Cycle Animations"
+            }
+        }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

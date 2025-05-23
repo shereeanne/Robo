@@ -8,9 +8,9 @@
 #include <QGuiApplication>
 #include "qqmlextensionplugin.h"
 
+Q_IMPORT_QML_PLUGIN(Generated_QtQuick3D_ScenePlugin)
 Q_IMPORT_QML_PLUGIN(CarRobotPlugin)
 Q_IMPORT_QML_PLUGIN(CarRobotContentPlugin)
-Q_IMPORT_QML_PLUGIN(Generated_QtQuick3D_ScenePlugin)
 
 const char mainQmlFile[] = "qrc:/qt/qml/CarRobotContent/App.qml";
 
