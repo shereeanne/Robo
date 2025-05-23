@@ -1,6 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("org.qtproject.qt.gradleplugin") version "1.+"
+}
+
+QtBuild {
+
+    qtPath = file("../../../../Qt/6.9.0")
+    projectPath = file("../../CarRobot")
+
 }
 
 android {
@@ -9,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.baseapp"
-        minSdk = 24
+        minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
